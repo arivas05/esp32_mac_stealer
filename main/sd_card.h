@@ -15,7 +15,10 @@
 #define MOUNT_POINT "/sdcard"
 #define EXAMPLE_IS_UHS1    (CONFIG_EXAMPLE_SDMMC_SPEED_UHS_I_SDR50 || CONFIG_EXAMPLE_SDMMC_SPEED_UHS_I_DDR50 || CONFIG_EXAMPLE_SDMMC_SPEED_UHS_I_SDR104)
 
+extern const char *outputfile;
+
 #ifdef CONFIG_EXAMPLE_DEBUG_PIN_CONNECTIONS
+
 const char* names[] = {"CLK", "CMD", "D0", "D1", "D2", "D3"};
 const int pins[] = {CONFIG_EXAMPLE_PIN_CLK,
                     CONFIG_EXAMPLE_PIN_CMD,
@@ -50,8 +53,8 @@ pin_configuration_t config = {
 };
 #endif //CONFIG_EXAMPLE_DEBUG_PIN_CONNECTIONS
 
-static esp_err_t s_example_write_file(const char *path, char *data);
+ esp_err_t s_example_write_file(const char *path, char *data);
 
-static esp_err_t s_example_read_file(const char *path);
+ esp_err_t s_example_read_file(const char *path);
 
 static esp_err_t s_example_reset_card_power(void);

@@ -13,14 +13,13 @@
 ****************************************************************************/
 
 #include "ble_discovery.h"
-#include "fnv1a.h"
 
 static app_gap_cb_t m_dev_info;
 
-static void exists(char *str, process *record)
-{
-    uint32_t hash = fnv1a_hash(str);
-    insertion(hash, str, record);
+static process *g_record = NULL;
+
+static void ble_set_record(process *record) {
+    g_record = record;
 }
 
 static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
@@ -32,7 +31,6 @@ static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
     uint8_t *p = bda;
     snprintf(str, size, "%02x:%02x:%02x:%02x:%02x:%02x",
              p[0], p[1], p[2], p[3], p[4], p[5]);
-    exists(str, record);
     return str;
 }
 
@@ -92,7 +90,7 @@ static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len
 
 static void update_device_info(esp_bt_gap_cb_param_t *param)
 {
-    char bda_str[18];
+    char bda_str[LENGTH];
     uint32_t cod = 0;
     int32_t rssi = -129; /* invalid value */
     uint8_t *bdname = NULL;
@@ -100,8 +98,12 @@ static void update_device_info(esp_bt_gap_cb_param_t *param)
     uint8_t *eir = NULL;
     int eir_len = 0;
     esp_bt_gap_dev_prop_t *p;
+    bda2str(param->disc_res.bda, bda_str, sizeof(bda_str));
+    ESP_LOGI(GAP_TAG, "Device found: %s", bda_str);
+    
+    uint32_t hash = fnv1a_hash(bda_str);
+    insertion(hash, bda_str, g_record);
 
-    ESP_LOGI(GAP_TAG, "Device found: %s", bda2str(param->disc_res.bda, bda_str, sizeof(bda_str)));
     for (int i = 0; i < param->disc_res.num_prop; i++) {
         p = param->disc_res.prop + i;
         switch (p->type) {
@@ -177,7 +179,7 @@ static void bt_app_gap_init(void)
 static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
 {
     app_gap_cb_t *p_dev = &m_dev_info;
-    char bda_str[18];
+    char bda_str[LENGTH];
     char uuid_str[37];
 
     switch (event) {
@@ -226,8 +228,11 @@ static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *pa
     return;
 }
 
-static void bt_app_gap_start_up(void)
+static void bt_app_gap_start_up(process *record)
 {
+    /* going past the void func(void) and passing the record*/
+    ble_set_record(record);
+
     /* register GAP callback function */
     esp_bt_gap_register_callback(bt_app_gap_cb);
 

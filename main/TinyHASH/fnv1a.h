@@ -11,7 +11,7 @@
 #define DEFAULT "00:00:00:00:00:00\0"
 
 typedef struct process{
-    char mac_address[17];
+    char mac_address[LENGTH-1];
     size_t num_probes;
 } process;
 

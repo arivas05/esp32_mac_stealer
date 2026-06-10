@@ -1,5 +1,7 @@
 #include "fnv1a.h"
 
+
+
 void init_record(process *record){
     for(size_t i = 0; i<MAX_PROBES; i++){
         strcpy(record[i].mac_address, DEFAULT);
@@ -28,22 +30,41 @@ uint8_t check_hash(uint32_t hash, char *mac_address, process *record){
     } else if(record[hash].num_probes > 0 && strcmp(record[hash].mac_address,DEFAULT) != 0){
         printf("Collision\n");
         return 2;
+    } else {
+        return 0;
     }
 }
 
 void insertion(uint32_t hash, char *mac_address, process *record){
     uint8_t ret = check_hash(hash, mac_address, record);
     switch(ret){
+        case 0:
+            perror("ERROR"); break;
         case 1:
-            strcpy(record[hash].mac_address, mac_address); break;
+            strcpy(record[hash].mac_address, mac_address); 
+            s_example_write_file(outputfile, mac_address); 
+            record[hash].num_probes+=1; break;
+        case 2:{
+            uint8_t attempts = 0;
+            while (attempts < MAX_PROBES) {
+                record[hash].num_probes += 1;
+                hash = random_probe(hash);
+                uint8_t r2 = check_hash(hash, mac_address, record);
+                if (r2 == 1) {
+                    strcpy(record[hash].mac_address, mac_address);
+                    s_example_write_file(outputfile, mac_address);
+                    record[hash].num_probes += 1;
+                    break;
+                } else if (r2 == 3) {
+                    perror("Probing ERROR"); break;  // duplicate found during probing
+                }
+                attempts++;
+            }
+            break;
+        }
         case 3:
             break;
-        case 2:
-            record[hash].num_probes++;
-            hash = random_probe(hash);
-            insertion(hash, mac_address, record);
     }
-    record[hash].num_probes=+1;
     return;
 }
 

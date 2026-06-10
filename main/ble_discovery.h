@@ -11,6 +11,7 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "esp_gap_bt_api.h"
+#include "ble_discovery.h"
 
 #define GAP_TAG          "GAP"
 
@@ -36,7 +37,7 @@ typedef struct {
 
 static app_gap_cb_t m_dev_info;
 
-static void exists(char *str, process *record);
+static void ble_set_record(process *record);
 
 static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
 
@@ -48,4 +49,4 @@ static void bt_app_gap_init(void);
 
 static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
 
-static void bt_app_gap_start_up(void);
+static void bt_app_gap_start_up(process *record);

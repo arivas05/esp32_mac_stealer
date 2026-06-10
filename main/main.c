@@ -1,14 +1,19 @@
 #include "ble_discovery.h"
-static const char *outputfile = MOUNT_POINT"/output.txt"
+const char *outputfile = MOUNT_POINT"/output.txt";
 
-process *record = (process *)malloc(MAX_PROBES *sizeof(process));
-
-int main(void){
+void app_main(void){
 
 char bda_str[18] = {0};
     // Initialize NVS — it is used to store PHY calibration data and save key-value pairs in flash memory
-
+    process *record = (process *)malloc(MAX_PROBES *sizeof(process));
+    init_record(record);
     esp_err_t ret = nvs_flash_init();
+    // Card has been initialized, print its properties
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 //---------------------------------------------------------------------------------
     esp_vfs_fat_sdmmc_mount_config_t mount_config = {
 #ifdef CONFIG_EXAMPLE_FORMAT_IF_MOUNT_FAILED
@@ -19,9 +24,13 @@ char bda_str[18] = {0};
         .max_files = 5,
         .allocation_unit_size = 16 * 1024
     };
+    
     sdmmc_card_t *card;
     const char mount_point[] = MOUNT_POINT;
     ESP_LOGI(TAG, "Initializing SD card");
+
+    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_BLE));
+
 
     // Use settings defined above to initialize SD card and mount FAT filesystem.
     // Note: esp_vfs_fat_sdmmc/sdspi_mount is all-in-one convenience functions.
@@ -111,6 +120,8 @@ char bda_str[18] = {0};
     ESP_LOGI(TAG, "Mounting filesystem");
     ret = esp_vfs_fat_sdmmc_mount(mount_point, &host, &slot_config, &mount_config, &card);
 
+    ESP_ERROR_CHECK( ret );
+
     if (ret != ESP_OK) {
         if (ret == ESP_FAIL) {
             ESP_LOGE(TAG, "Failed to mount filesystem. "
@@ -125,17 +136,7 @@ char bda_str[18] = {0};
         return;
     }
     ESP_LOGI(TAG, "Filesystem mounted");
-
-    // Card has been initialized, print its properties
     sdmmc_card_print_info(stdout, card);
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK( ret );
-
-    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_BLE));
-
 // --------------------------------------------------------------------------------------------------------
 
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
@@ -162,6 +163,6 @@ char bda_str[18] = {0};
 
     ESP_LOGI(GAP_TAG, "Own address:[%s]", bda2str((uint8_t *)esp_bt_dev_get_address(), bda_str, sizeof(bda_str)));
 
-    bt_app_gap_start_up();
-    return 1;
+    bt_app_gap_start_up(record);
+    return;
 }
