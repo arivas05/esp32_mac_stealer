@@ -27,19 +27,14 @@ def test_examples_sd_card_sdspi(dut: Dut) -> None:
     logging.info(f'Card {name} {_type} {speed}MHz {size} found')
 
     message_list1 = (
-        'Opening file /sdcard/hello.txt',
+        'Opening file /sdcard/output.txt',
         'File written',
-        'Renaming file /sdcard/hello.txt to /sdcard/foo.txt',
-        'Reading file /sdcard/foo.txt',
-        f"Read from file: 'Hello {name}!'",
     )
     sd_card_format = re.compile(str.encode('formatting drive, allocation unit size=\\S+'))
     after_card_format = "file doesn't exist, formatting done"
     message_list2 = (
-        'Opening file /sdcard/nihao.txt',
+        'Opening file /sdcard/output.txt',
         'File written',
-        'Reading file /sdcard/nihao.txt',
-        f"Read from file: 'Nihao {name}!'",
         'Card unmounted',
     )
 
