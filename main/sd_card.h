@@ -18,30 +18,18 @@
 extern const char *outputfile;
 
 #ifdef CONFIG_EXAMPLE_DEBUG_PIN_CONNECTIONS
-
-const char* names[] = {"CLK", "CMD", "D0", "D1", "D2", "D3"};
+const char* names[] = {"CLK ", "MOSI", "MISO", "CS  "};
 const int pins[] = {CONFIG_EXAMPLE_PIN_CLK,
-                    CONFIG_EXAMPLE_PIN_CMD,
-                    CONFIG_EXAMPLE_PIN_D0
-                    #ifdef CONFIG_EXAMPLE_SDMMC_BUS_WIDTH_4
-                    ,CONFIG_EXAMPLE_PIN_D1,
-                    CONFIG_EXAMPLE_PIN_D2,
-                    CONFIG_EXAMPLE_PIN_D3
-                    #endif
-                    };
+                    CONFIG_EXAMPLE_PIN_MOSI,
+                    CONFIG_EXAMPLE_PIN_MISO,
+                    CONFIG_EXAMPLE_PIN_CS};
 
 const int pin_count = sizeof(pins)/sizeof(pins[0]);
-
 #if CONFIG_EXAMPLE_ENABLE_ADC_FEATURE
 const int adc_channels[] = {CONFIG_EXAMPLE_ADC_PIN_CLK,
-                            CONFIG_EXAMPLE_ADC_PIN_CMD,
-                            CONFIG_EXAMPLE_ADC_PIN_D0
-                            #ifdef CONFIG_EXAMPLE_SDMMC_BUS_WIDTH_4
-                            ,CONFIG_EXAMPLE_ADC_PIN_D1,
-                            CONFIG_EXAMPLE_ADC_PIN_D2,
-                            CONFIG_EXAMPLE_ADC_PIN_D3
-                            #endif
-                            };
+                            CONFIG_EXAMPLE_ADC_PIN_MOSI,
+                            CONFIG_EXAMPLE_ADC_PIN_MISO,
+                            CONFIG_EXAMPLE_ADC_PIN_CS};
 #endif //CONFIG_EXAMPLE_ENABLE_ADC_FEATURE
 
 pin_configuration_t config = {
@@ -52,6 +40,13 @@ pin_configuration_t config = {
 #endif
 };
 #endif //CONFIG_EXAMPLE_DEBUG_PIN_CONNECTIONS
+
+// Pin assignments can be set in menuconfig, see "SD SPI Example Configuration" menu.
+// You can also change the pin assignments here by changing the following 4 lines.
+#define PIN_NUM_MISO  CONFIG_EXAMPLE_PIN_MISO
+#define PIN_NUM_MOSI  CONFIG_EXAMPLE_PIN_MOSI
+#define PIN_NUM_CLK   CONFIG_EXAMPLE_PIN_CLK
+#define PIN_NUM_CS    CONFIG_EXAMPLE_PIN_CS
 
  esp_err_t s_example_write_file(const char *path, char *data);
 
