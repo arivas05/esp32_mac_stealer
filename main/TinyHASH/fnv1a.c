@@ -1,7 +1,5 @@
 #include "fnv1a.h"
 
-
-
 void init_record(process *record){
     for(size_t i = 0; i<MAX_PROBES; i++){
         strcpy(record[i].mac_address, DEFAULT);

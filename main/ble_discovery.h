@@ -11,8 +11,7 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "esp_gap_bt_api.h"
-#include "sd_card_io.h"
-
+#include "fnv1a.h"
 #define GAP_TAG          "GAP"
 
 typedef enum {
@@ -37,16 +36,16 @@ typedef struct {
 
 static app_gap_cb_t m_dev_info;
 
-static void ble_set_record(process *record);
+ void ble_set_record(process *record);
 
-static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
+ char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
 
-static char *uuid2str(esp_bt_uuid_t *uuid, char *str, size_t size);
+ char *uuid2str(esp_bt_uuid_t *uuid, char *str, size_t size);
 
-static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
+ bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
 
-static void bt_app_gap_init(void);
+ void bt_app_gap_init(void);
 
-static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
+ void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
 
-static void bt_app_gap_start_up(process *record);
+ void bt_app_gap_start_up(process *record);

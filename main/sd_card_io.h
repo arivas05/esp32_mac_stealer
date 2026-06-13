@@ -51,5 +51,3 @@ pin_configuration_t config = {
  esp_err_t s_example_write_file(const char *path, char *data);
 
  esp_err_t s_example_read_file(const char *path);
-
-static esp_err_t s_example_reset_card_power(void);

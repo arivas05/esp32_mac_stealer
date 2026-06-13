@@ -18,11 +18,11 @@ static app_gap_cb_t m_dev_info;
 
 static process *g_record = NULL;
 
-static void ble_set_record(process *record) {
+ void ble_set_record(process *record) {
     g_record = record;
 }
 
-static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
+ char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
 {
     if (bda == NULL || str == NULL || size < 18) {
         return "";
@@ -34,7 +34,7 @@ static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
     return str;
 }
 
-static char *uuid2str(esp_bt_uuid_t *uuid, char *str, size_t size)
+ char *uuid2str(esp_bt_uuid_t *uuid, char *str, size_t size)
 {
     if (uuid == NULL || str == NULL) {
         return "";
@@ -56,7 +56,7 @@ static char *uuid2str(esp_bt_uuid_t *uuid, char *str, size_t size)
     return str;
 }
 
-static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
+ bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
 {
     uint8_t *rmt_bdname = NULL;
     uint8_t rmt_bdname_len = 0;
@@ -88,7 +88,7 @@ static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len
     return false;
 }
 
-static void update_device_info(esp_bt_gap_cb_param_t *param)
+ void update_device_info(esp_bt_gap_cb_param_t *param)
 {
     char bda_str[LENGTH];
     uint32_t cod = 0;
@@ -168,7 +168,7 @@ static void update_device_info(esp_bt_gap_cb_param_t *param)
     esp_bt_gap_cancel_discovery();
 }
 
-static void bt_app_gap_init(void)
+ void bt_app_gap_init(void)
 {
     app_gap_cb_t *p_dev = &m_dev_info;
     memset(p_dev, 0, sizeof(app_gap_cb_t));
@@ -176,7 +176,7 @@ static void bt_app_gap_init(void)
     p_dev->state = APP_GAP_STATE_IDLE;
 }
 
-static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
+ void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
 {
     app_gap_cb_t *p_dev = &m_dev_info;
     char bda_str[LENGTH];
@@ -228,7 +228,7 @@ static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *pa
     return;
 }
 
-static void bt_app_gap_start_up(process *record)
+ void bt_app_gap_start_up(process *record)
 {
     /* going past the void func(void) and passing the record*/
     ble_set_record(record);

@@ -10,7 +10,7 @@
 
 
 #include "sd_card_io.h"
-static esp_err_t s_example_write_file(const char *path, char *data)
+ esp_err_t s_example_write_file(const char *path, char *data)
 {
     ESP_LOGI(TAG, "Opening file %s", path);
     FILE *f = fopen(path, "w");
@@ -25,7 +25,7 @@ static esp_err_t s_example_write_file(const char *path, char *data)
     return ESP_OK;
 }
 
-static esp_err_t s_example_read_file(const char *path)
+ esp_err_t s_example_read_file(const char *path)
 {
     ESP_LOGI(TAG, "Reading file %s", path);
     FILE *f = fopen(path, "r");
