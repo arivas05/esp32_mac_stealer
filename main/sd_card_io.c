@@ -8,13 +8,8 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
-#include <string.h>
-#include <sys/unistd.h>
-#include <sys/stat.h>
-#include "esp_vfs_fat.h"
-#include "sdmmc_cmd.h"
-#include "sd_test_io.h"
-#include "sd_card.h"
+
+#include "sd_card_io.h"
 static esp_err_t s_example_write_file(const char *path, char *data)
 {
     ESP_LOGI(TAG, "Opening file %s", path);

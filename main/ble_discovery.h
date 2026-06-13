@@ -11,7 +11,7 @@
 #include "esp_bt_main.h"
 #include "esp_bt_device.h"
 #include "esp_gap_bt_api.h"
-#include "ble_discovery.h"
+#include "sd_card_io.h"
 
 #define GAP_TAG          "GAP"
 
