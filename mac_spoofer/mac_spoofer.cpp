@@ -32,6 +32,10 @@ int main (void){
     std::cout << "Press Enter to change to the next MAC address...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
+        char end;
+        while((c = fgetc(mfn_fp)) != '\n' && c != EOF){
+            continue;
+        }
     }
     fclose(mfn_fp);
     return 0;
