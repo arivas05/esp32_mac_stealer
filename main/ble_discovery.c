@@ -14,7 +14,7 @@
 
 #include "ble_discovery.h"
 #define total_discoveries 0 // 0 means unlimited
-#define upkeep_time 20
+#define upkeep_time 10
 
 static process *g_record = NULL;
 static app_gap_cb_t m_dev_info;
@@ -253,6 +253,7 @@ static app_gap_cb_t m_dev_info;
         app_gap_cb_t *p_dev = &m_dev_info;
         p_dev->state = APP_GAP_STATE_DEVICE_DISCOVERING;
         esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, upkeep_time, total_discoveries);
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
     
 }
