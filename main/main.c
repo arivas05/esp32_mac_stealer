@@ -1,6 +1,6 @@
 #include "ble_discovery.h"
 const char *outputfile = MOUNT_POINT"/output.txt";
-
+static const char *TAG = "example";
 void app_main(void){
 
 char bda_str[18] = {0};
@@ -123,7 +123,7 @@ char bda_str[18] = {0};
     }
 
     ESP_LOGI(GAP_TAG, "Own address:[%s]", bda2str((uint8_t *)esp_bt_dev_get_address(), bda_str, sizeof(bda_str)));
-
+    
     bt_app_gap_start_up(record);
     return;
 }

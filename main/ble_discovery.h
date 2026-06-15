@@ -34,8 +34,6 @@ typedef struct {
     app_gap_state_t state;
 } app_gap_cb_t;
 
-static app_gap_cb_t m_dev_info;
-
  void ble_set_record(process *record);
 
  char *bda2str(esp_bd_addr_t bda, char *str, size_t size);

@@ -1,0 +1,2 @@
+source /home/sics/projects/esp32_mac_stealer/build/gdbinit/symbols
+source /home/sics/projects/esp32_mac_stealer/build/gdbinit/connect

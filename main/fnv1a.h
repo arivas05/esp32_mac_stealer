@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "sd_card.h"
+#include "sd_card_io.h"
 #define MAX_PROBES 256
 #define BYTE 8
 #define LENGTH 18
@@ -21,7 +21,7 @@ uint32_t fnv1a_hash(char *data);
 
 uint8_t check_hash(uint32_t hash, char *mac_address, process *record);
 
-void insertion(uint32_t hash, char *mac_address, process *record);
+void insertion(uint32_t hash, char *mac_address, process *record, char *device_name);
 
 uint32_t random_probe(uint32_t R);
 

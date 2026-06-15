@@ -13,11 +13,11 @@
 ****************************************************************************/
 
 #include "ble_discovery.h"
-
-static app_gap_cb_t m_dev_info;
+#define total_discoveries 0 // 0 means unlimited
+#define upkeep_time 20
 
 static process *g_record = NULL;
-
+static app_gap_cb_t m_dev_info;
  void ble_set_record(process *record) {
     g_record = record;
 }
@@ -100,9 +100,6 @@ static process *g_record = NULL;
     esp_bt_gap_dev_prop_t *p;
     bda2str(param->disc_res.bda, bda_str, sizeof(bda_str));
     ESP_LOGI(GAP_TAG, "Device found: %s", bda_str);
-    
-    uint32_t hash = fnv1a_hash(bda_str);
-    insertion(hash, bda_str, g_record);
 
     for (int i = 0; i < param->disc_res.num_prop; i++) {
         p = param->disc_res.prop + i;
@@ -163,9 +160,14 @@ static process *g_record = NULL;
     }
 
     ESP_LOGI(GAP_TAG, "Found a target device, address %s, name %s", bda_str, p_dev->bdname);
+    uint32_t hash = fnv1a_hash(bda_str);
+    char * device_name = (char *)p_dev->bdname;
+    insertion(hash, bda_str, g_record, device_name);
+    /*
     p_dev->state = APP_GAP_STATE_DEVICE_DISCOVER_COMPLETE;
     ESP_LOGI(GAP_TAG, "Cancel device discovery ...");
     esp_bt_gap_cancel_discovery();
+    */
 }
 
  void bt_app_gap_init(void)
@@ -230,23 +232,27 @@ static process *g_record = NULL;
 
  void bt_app_gap_start_up(process *record)
 {
+    char *dev_name = "MAC IZMINE";
     /* going past the void func(void) and passing the record*/
     ble_set_record(record);
 
     /* register GAP callback function */
+    
     esp_bt_gap_register_callback(bt_app_gap_cb);
 
-    char *dev_name = "ESP_GAP_INQUIRY";
     esp_bt_gap_set_device_name(dev_name);
 
     /* set discoverable and connectable mode, wait to be connected */
-    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
+    esp_bt_gap_set_scan_mode(ESP_BT_NON_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
 
-    /* initialize device information and status */
-    bt_app_gap_init();
+    while(true){
+        /* initialize device information and status */
+        bt_app_gap_init();
 
-    /* start to discover nearby Bluetooth devices */
-    app_gap_cb_t *p_dev = &m_dev_info;
-    p_dev->state = APP_GAP_STATE_DEVICE_DISCOVERING;
-    esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
+        /* start to discover nearby Bluetooth devices */
+        app_gap_cb_t *p_dev = &m_dev_info;
+        p_dev->state = APP_GAP_STATE_DEVICE_DISCOVERING;
+        esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, upkeep_time, total_discoveries);
+    }
+    
 }

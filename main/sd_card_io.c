@@ -8,12 +8,13 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
-
+#include <string.h>
 #include "sd_card_io.h"
+static const char *TAG = "example";
  esp_err_t s_example_write_file(const char *path, char *data)
 {
     ESP_LOGI(TAG, "Opening file %s", path);
-    FILE *f = fopen(path, "w");
+    FILE *f = fopen(path, "a");
     if (f == NULL) {
         ESP_LOGE(TAG, "Failed to open file for writing");
         return ESP_FAIL;

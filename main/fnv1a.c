@@ -1,5 +1,8 @@
 #include "fnv1a.h"
 
+const char *space = " ";
+const char * end = "\n";
+
 void init_record(process *record){
     for(size_t i = 0; i<MAX_PROBES; i++){
         strcpy(record[i].mac_address, DEFAULT);
@@ -22,7 +25,7 @@ uint8_t check_hash(uint32_t hash, char *mac_address, process *record){
     if(record[hash].num_probes == 0 && strcmp(record[hash].mac_address,DEFAULT) == 0){
         printf("Found a new MAC Address\n");
         return 1;
-    } else if(record[hash].num_probes > 0 && strcmp(record[hash].mac_address,DEFAULT) == 0){
+    } else if(record[hash].num_probes > 0 && strcmp(record[hash].mac_address,mac_address) == 0){
         printf("MAC Address repeat\n");
         return 3;
     } else if(record[hash].num_probes > 0 && strcmp(record[hash].mac_address,DEFAULT) != 0){
@@ -33,23 +36,31 @@ uint8_t check_hash(uint32_t hash, char *mac_address, process *record){
     }
 }
 
-void insertion(uint32_t hash, char *mac_address, process *record){
+void insertion(uint32_t hash, char *mac_address, process *record, char *device_name){
     uint8_t ret = check_hash(hash, mac_address, record);
     switch(ret){
         case 0:
             perror("ERROR"); break;
-        case 1:
+        case 1:{
             strcpy(record[hash].mac_address, mac_address); 
+            strcat(mac_address, space);
+            strcat(mac_address, device_name);
+            strcat(mac_address, end);
             s_example_write_file(outputfile, mac_address); 
             record[hash].num_probes+=1; break;
+        }
         case 2:{
-            uint8_t attempts = 0;
+            uint16_t attempts = 0;
             while (attempts < MAX_PROBES) {
                 record[hash].num_probes += 1;
                 hash = random_probe(hash);
                 uint8_t r2 = check_hash(hash, mac_address, record);
                 if (r2 == 1) {
+                    const char *space = " ";
                     strcpy(record[hash].mac_address, mac_address);
+                    strcat(mac_address, space);
+                    strcat(mac_address, device_name);
+                    strcat(mac_address, end);
                     s_example_write_file(outputfile, mac_address);
                     record[hash].num_probes += 1;
                     break;
@@ -74,7 +85,7 @@ uint32_t random_probe(uint32_t R){
 
 void read_records(process *record){
     for(size_t i = 0; i <MAX_PROBES; i++){
-        printf("MAC Address: %s and # of probes %ld\n", record[i].mac_address, record[i].num_probes);
+        printf("MAC Address: %s and # of probes %d\n", record[i].mac_address, record[i].num_probes);
     }
     return; 
 }
