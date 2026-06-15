@@ -4,3 +4,4 @@ Thank you to Blednica for letting me collaberate with him on TinyHASH
 
 The ESP-IDF is needed to run this repository https://github.com/espressif/esp-idf 
 
+Make sure to read the README.md in the mac_spoofer file!
