@@ -23,6 +23,7 @@ std::string identify_os(void) {
 
     if (!os_identified) os = "unidentified";
     ios_file.close();
+    std::cout<<os<<std::endl;
     return os;
 }
 
@@ -38,7 +39,7 @@ bool download_net_tools(void) {
         system("sudo dnf check-update && sudo dnf upgrade -y");
         system("sudo dnf install -y net-tools");
     } else {
-        std::cout << "os unidentifiable\n";
+        std::cout << "os unidentifiable"<<std::endl;
         return false;
     }
     return true;
