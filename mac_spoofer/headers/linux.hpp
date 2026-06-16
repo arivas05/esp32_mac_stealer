@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <memory>
+#include <array>
 using namespace std;
 
 string exec(const string& cmd);

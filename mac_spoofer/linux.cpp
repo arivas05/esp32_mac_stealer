@@ -5,7 +5,7 @@ using namespace std;
 string exec(const string& cmd) {
     array<char, 128> buffer;
     string result;
-    unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    unique_ptr<FILE, int(*)(FILE*)> pipe(popen(cmd.c_str(), "r"), pclose);
     if (!pipe) {
         cerr << "[-] Failed to open pipe." << endl;
         return "";
