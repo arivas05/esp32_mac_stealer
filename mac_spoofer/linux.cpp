@@ -18,10 +18,17 @@ string exec(const string& cmd) {
 bool validAddress(const string& mac) {
     if (mac.length() == 17) {
         for (size_t i = 0; i < mac.length(); ++i) {
-            if (i % 3 == 2) if (mac[i] != ':') return false;
-            else if (!((mac[i] >= '0' && mac[i] <= '9') || (mac[i] >= 'A' && mac[i] <= 'F') || (mac[i] >= 'a' && mac[i] <= 'f'))) return false;
+            if(i % 3 == 2 && mac[i] != ':'){
+                cout<<"no colon on index "<< i <<endl;
+                return false;
+            }else if (!((mac[i] >= '0' && mac[i] <= '9') || (mac[i] >= 'A' && mac[i] <= 'F') || (mac[i] >= 'a' && mac[i] <= 'f')|| mac[i] == ':')){
+                cout<<"not hexadecimal on index "<< i <<endl;
+                return false;
+            } 
         }
         return true;
+    } else {
+        cout<<"wrong size"<<endl;
     }
     return false;
 }
@@ -36,10 +43,21 @@ void resetNIC(const string& interfaceName) {
 
 // Function to set MAC address
 void setMACAddress(const string& interfaceName, const string& macAddress) {
-    string cmd = "ip link set dev " + interfaceName + " address " + macAddress;
+
+    string cmd = "ifconfig " + interfaceName + " down";
     string result = exec(cmd);
+    if (result.empty()) cout << "[+] Network interface " << interfaceName << " shutdown." << endl;
+    else cerr << "[-] Failed to shutdown network interface: " << result << endl;
+
+    cmd = "ip link set dev " + interfaceName + " address " + macAddress;
+    result = exec(cmd);
     if (result.empty()) cout << "[+] MAC address of " << interfaceName << " set to " << macAddress << " successfully." << endl;
     else cerr << "[-] Failed to set MAC address: " << result << endl;
+
+    cmd = "ifconfig " + interfaceName + " up";
+    result = exec(cmd);
+    if (result.empty()) cout << "[+] Network interface " << interfaceName << " booted up." << endl;
+    else cerr << "[-] Failed to boot up network interface: " << result << endl;
 }
 
 // Function to print usage instructions
