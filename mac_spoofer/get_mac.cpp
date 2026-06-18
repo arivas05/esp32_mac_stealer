@@ -52,7 +52,7 @@ bool download_package(std::string package) {
 std::string grab_my_mac(std::string &interfaceName) {
     bool ret = false;
     if (system("which ifconfig > /dev/null 2>&1") != 0) { 
-        ret = download_package();
+        ret = download_package("net-tools");
     } else {
         ret = true;
     }
@@ -80,6 +80,7 @@ std::string grab_my_mac(std::string &interfaceName) {
 }
 
 void dhclient(std::string &interfaceName){
+    bool ret = false;
     std::string cmd = "sudo dhclient " + interfaceName;
     if (system(cmd.c_str()) != 0) { 
         ret = download_package("isc-dhcp-client");
