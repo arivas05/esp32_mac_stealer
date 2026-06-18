@@ -8,7 +8,7 @@ The project was originally for Information Security by Dr. Varol and is being ex
 Thank you to Blednica for letting me collaberate with him on TinyHASH
 
 ## REQUIREMENTS
-This project reqiuires an ESP32, a breadboard, copper wires, SPI breakout board, a MicroSD card, and MicroSD card reader. The ESP-IDF is needed to run this repository https://github.com/espressif/esp-idf 
+This project reqiuires an ESP32, a breadboard, copper wires, SPI breakout board, a MicroSD card, and a MicroSD card reader. The ESP-IDF is needed to run this repository https://github.com/espressif/esp-idf 
 
 
 ## Wiring Setup
