@@ -45,7 +45,7 @@ bool download_net_tools(void) {
     return true;
 }
 
-std::string grab_my_mac(string &interfaceName) {
+std::string grab_my_mac(std::string &interfaceName) {
     bool ret = false;
     if (system("which ifconfig > /dev/null 2>&1") != 0) { 
         ret = download_net_tools();
@@ -54,8 +54,9 @@ std::string grab_my_mac(string &interfaceName) {
     }
 
     if (!ret) { return ""; } 
-    std::string cmd = "ifconfig " interfaceName > " " > ico_filename;
-    system(cmd); 
+    std::string cmd = "ifconfig " + interfaceName + " > " + ico_filename;
+    system(cmd.c_str());
+    
 
 
     std::fstream ico(ico_filename);

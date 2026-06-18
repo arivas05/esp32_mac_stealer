@@ -1,5 +1,4 @@
 #include <stdio.h> 
-#include <stdboo.h>
 #include "get_mac.hpp"
 #include "linux.hpp"
 
@@ -18,7 +17,7 @@ int main(int argc, char* argv[]) {
     std::string action,interfaceName,macAddress,my_mac_address;
 
     while (std::getline(fptr, macAddress)) {
-        if (!parseArguments(argc, argv, action, interfaceName, macAddress)) {
+        if (!parseArguments(argc, argv, action, interfaceName)) {
             printUsage(argv[0]);
             return 1;
         }

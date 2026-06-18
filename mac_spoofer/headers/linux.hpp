@@ -18,4 +18,4 @@ void setMACAddress(const string& interfaceName, const string& macAddress);
 
 void printUsage(const char* programName);
 
-bool parseArguments(int argc, char* argv[], string& action, string& interfaceName, string& macAddress);
+bool parseArguments(int argc, char* argv[], string& action, string& interfaceName);

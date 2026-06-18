@@ -11,4 +11,4 @@
 
 std::string identify_os(void);
 bool download_net_tools(void);
-std::string grab_my_mac(string &interfaceName);
+std::string grab_my_mac(std::string &interfaceName);
