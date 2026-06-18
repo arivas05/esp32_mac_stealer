@@ -24,7 +24,7 @@ SD card pin | SPI pin | ESP32 pin     | ESP32-S2, ESP32-S3 | ESP32-P4 | ESP32-H2
 
 ## Diagram
 
-
+![Circuit Diagram](images/diagram.png)
 
 
 
