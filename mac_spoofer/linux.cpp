@@ -53,17 +53,16 @@ void printUsage(const char* programName) {
 }
 
 // Function to parse command-line arguments
-bool parseArguments(int argc, char* argv[], string& action, string& interfaceName, string& macAddress) {
+bool parseArguments(int argc, char* argv[], string& action, string& interfaceName) {
     if (argc < 3) return false;
     string option(argv[1]);
     if (option == "-r") {
         action = option;
         interfaceName = argv[2];
         return true;
-    } else if (option == "-s" && argc == 4) {
+    } else if (option == "-s") {
         action = option;
         interfaceName = argv[2];
-        macAddress = argv[3];
         return true;
     }
     return false;

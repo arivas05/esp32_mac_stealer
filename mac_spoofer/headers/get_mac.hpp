@@ -7,8 +7,8 @@
 #include <unistd.h>    
 #include <cstdio>   
 
-#define WIFI_INTERFACE "wlan0" 
+//#define WIFI_INTERFACE "wlan0" 
 
 std::string identify_os(void);
 bool download_net_tools(void);
-std::string grab_my_mac(void);
+std::string grab_my_mac(string &interfaceName);

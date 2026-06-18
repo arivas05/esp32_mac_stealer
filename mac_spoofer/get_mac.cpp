@@ -45,7 +45,7 @@ bool download_net_tools(void) {
     return true;
 }
 
-std::string grab_my_mac(void) {
+std::string grab_my_mac(string &interfaceName) {
     bool ret = false;
     if (system("which ifconfig > /dev/null 2>&1") != 0) { 
         ret = download_net_tools();
@@ -54,8 +54,8 @@ std::string grab_my_mac(void) {
     }
 
     if (!ret) { return ""; } 
-
-    system("ifconfig " WIFI_INTERFACE " > ipconfigoutput.txt"); 
+    std::string cmd = "ifconfig " interfaceName > " " > ico_filename;
+    system(cmd); 
 
 
     std::fstream ico(ico_filename);

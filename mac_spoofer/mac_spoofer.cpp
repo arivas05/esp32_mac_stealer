@@ -1,10 +1,11 @@
 #include <stdio.h> 
+#include <stdboo.h>
 #include "get_mac.hpp"
 #include "linux.hpp"
 
 int main(int argc, char* argv[]) { 
     const char* macfilename = "output.txt"; 
-
+    bool check = false;
     std::fstream fptr(macfilename);
 
     if (geteuid() != 0) {
@@ -12,25 +13,28 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::string my_mac_address = grab_my_mac();
-    while(true){
-        if (!validAddress(my_mac_address)) {
-        std::cerr << "[-] Invalid MAC address format." << std::endl;
-        std::cout << "input a valid MAC address" << std::endl;
-        std::cin >> my_mac_address;
-        } else {
-            std::cout << "valid MAC address" << std::endl; break;
-        }
-    }
 
 
-    std::string macAddress;
-    std::string action, interfaceName;
+    std::string action,interfaceName,macAddress,my_mac_address;
 
     while (std::getline(fptr, macAddress)) {
         if (!parseArguments(argc, argv, action, interfaceName, macAddress)) {
             printUsage(argv[0]);
             return 1;
+        }
+
+        if(!check){
+            my_mac_address = grab_my_mac(interfaceName);
+            while(true){
+                if (!validAddress(my_mac_address)) {
+                    std::cerr << "[-] Invalid MAC address format." << std::endl;
+                    std::cout << "input a valid MAC address" << std::endl;
+                    std::cin >> my_mac_address;
+                } else {
+                    std::cout << "valid MAC address" << std::endl; break;
+                }
+            }
+            check = true;
         }
 
         if (action == "-r") {
