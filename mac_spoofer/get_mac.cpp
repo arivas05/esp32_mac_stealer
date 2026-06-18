@@ -27,17 +27,21 @@ std::string identify_os(void) {
     return os;
 }
 
-bool download_net_tools(void) {
+bool download_package(std::string package) {
     std::string os = identify_os();
+    std::string cmd;
     if (os == "arch") {
+        cmd = "sudo pacman -S " + package;
         system("sudo pacman -Syu");
-        system("sudo pacman -S net-tools");
+        system(cmd.c_str());
     } else if (os == "debian" || os == "ubuntu") {
+        cmd = "sudo apt install -y " + package;
         system("sudo apt update && sudo apt upgrade -y");
-        system("sudo apt install -y net-tools");
+        system(cmd.c_str());
     } else if (os == "red hat" || os == "fedora" || os == "centos") {
+        cmd = "sudo dnf install -y " + package;
         system("sudo dnf check-update && sudo dnf upgrade -y");
-        system("sudo dnf install -y net-tools");
+        system(cmd.c_str());
     } else {
         std::cout << "os unidentifiable"<<std::endl;
         return false;
@@ -48,7 +52,7 @@ bool download_net_tools(void) {
 std::string grab_my_mac(std::string &interfaceName) {
     bool ret = false;
     if (system("which ifconfig > /dev/null 2>&1") != 0) { 
-        ret = download_net_tools();
+        ret = download_package();
     } else {
         ret = true;
     }
@@ -73,4 +77,16 @@ std::string grab_my_mac(std::string &interfaceName) {
     }
     ico.close();
     return mac;
+}
+
+void dhclient(std::string &interfaceName){
+    std::string cmd = "sudo dhclient " + interfaceName;
+    if (system(cmd.c_str()) != 0) { 
+        ret = download_package("isc-dhcp-client");
+    } else {
+        ret = true;
+    }
+    if (!ret) { return ; } 
+    system(cmd.c_str());
+    return;
 }

@@ -10,5 +10,6 @@
 //#define WIFI_INTERFACE "wlan0" 
 
 std::string identify_os(void);
-bool download_net_tools(void);
+bool download_package(std::string package);
 std::string grab_my_mac(std::string &interfaceName);
+void dhclient(std::string &interfaceName);

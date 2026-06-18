@@ -62,6 +62,6 @@ int main(int argc, char* argv[]) {
     fptr.close();
     setMACAddress(interfaceName, my_mac_address);
     std::string cmd = "sudo dhclient " + interfaceName;
-    system(cmd.c_str());
+    dhclient(interfaceName);
     return 0;
 }
